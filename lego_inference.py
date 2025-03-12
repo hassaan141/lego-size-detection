@@ -1,23 +1,66 @@
 from ultralytics import YOLO
 import cv2
+# import numpy as np
+# from segment_anything import SamPredictor, sam_model_registry
+# import torch
 
 model_path = r"weights\best.pt"
 
 model=YOLO(model_path)
 
-# test_path = r"images\720X720-photo-all-bricks.jpg"
+test_path = r"images\lego-red-brick.jpg"
 
-# results = model.predict(source=test_path, conf=0.25)
-# # print(results)
+results = model.predict(source=test_path, conf=0.25)
+# print(results)
 
 # image = results[0].plot()
 # resize = cv.resize(image, (720,720))
-# print(image)
-
+# boxes = results[0].boxes.xyxy[0].cpu().numpy()
+# print(boxes)
+# x1,y1,x2,y2=boxes
+# cv.circle(image, (round((x1+x2)/2), round((y1+y2)/2)), 5, (255, 0, 255), -1)
 # cv.imshow("Inference Result", resize)
 # cv.waitKey(0)
 # cv.destroyAllWindows()
 
+# segmented_mask = segment_with_sam(test_path, (cx, cy))
+
+# Show segmented mask
+# for i, mask in enumerate(segmented_mask):
+#     segmented_mask = (mask * 255).astype(np.uint8)
+#     cv.imshow(f"Segmentation {i}", segmented_mask)
+#     cv.waitKey(0)
+#     cv.destroyAllWindows()
+
+# def segment_with_sam(image_path, centroid):
+#     """Segment LEGO using SAM with centroid as input"""
+#     # Load SAM model (choose "vit_h", "vit_l", or "vit_b")
+#     sam = sam_model_registry["vit_h"](checkpoint="sam_vit_h.pth")  # Ensure you have the right checkpoint
+#     sam.to(device="cuda" if torch.cuda.is_available() else "cpu")  # Use GPU if available
+
+#     # Create predictor
+#     predictor = SamPredictor(sam)
+
+#     # Load image
+#     image = cv.imread(image_path)
+#     image_rgb = cv.cvtColor(image, cv.COLOR_BGR2RGB)
+#     predictor.set_image(image_rgb)
+
+#     # Provide the centroid as a segmentation prompt
+#     input_point = np.array([centroid])  # Convert centroid to NumPy array
+#     input_label = np.array([1])  # Label 1 for object segmentation
+
+#     # Get segmentation mask
+#     masks, scores, logits = predictor.predict(
+#         point_coords=input_point,
+#         point_labels=input_label,
+#         multimask_output=True
+#     )
+
+#     return masks
+
+###################################################
+#Real time detection
 cap = cv2.VideoCapture(0)
 
 if not cap.isOpened():
