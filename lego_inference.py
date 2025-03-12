@@ -38,7 +38,7 @@ while True:
     annotated_frame = results[0].plot()  
     
     # Display the resulting frame
-    cv2.imshow("Live Object Detection", annotated_frame)
+    cv2.imshow("Live Detection", annotated_frame)
 
     # Exit loop on pressing 'q'
     if cv2.waitKey(1) == ord("q"):
